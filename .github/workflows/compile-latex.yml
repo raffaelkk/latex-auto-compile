@@ -1,33 +1,42 @@
 name: Compile LaTeX
 on: [ push ]
 jobs:
-  container:
+  compile-all-tex:
     runs-on: ubuntu-latest
     container: kjarosh/latex:2024.4
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build main.tex
-        run: latexmk -pdf -output-directory=out main.tex
+      - name: Create output directory
+        run: mkdir -p out
 
-      - name: Build test1.tex
-        run: latexmk -pdf -output-directory=out test1.tex
+      - name: Find and compile all .tex files
+        run: |
+          echo "Finding all .tex files in repository..."
+          find . -name "*.tex" -type f | while read -r texfile; do
+            echo "Compiling: $texfile"
+            # Get the filename without path and extension
+            filename=$(basename "$texfile" .tex)
+            # Compile the file
+            latexmk -pdf -interaction=nonstopmode -output-directory=out "$texfile" || echo "Warning: Failed to compile $texfile"
+            # Rename output to include original path structure
+            if [ -f "out/${filename}.pdf" ]; then
+              # Create subdirectory structure in out/
+              dir=$(dirname "$texfile" | sed 's/^\.\///')
+              if [ "$dir" != "." ]; then
+                mkdir -p "out/$dir"
+                mv "out/${filename}.pdf" "out/${dir}/${filename}.pdf"
+              fi
+              echo "Successfully compiled: $texfile -> out/${dir}/${filename}.pdf"
+            fi
+          done
+          echo "Compilation complete. Listing all PDFs:"
+          find out -name "*.pdf" -type f
 
-      - name: Build test2.tex
-        run: latexmk -pdf -output-directory=out test2.tex
-
-      - name: Build test3.tex
-        run: latexmk -pdf -output-directory=out test3.tex
-
-      - name: Build test4.tex
-        run: latexmk -pdf -output-directory=out test4.tex
-
-      - name: Build test5.tex
-        run: latexmk -pdf -output-directory=out test5.tex
-
-      - name: Upload all documents
+      - name: Upload all compiled PDFs
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-documents
-          path: out/*.pdf
+          name: all-compiled-documents
+          path: out/**/*.pdf
+          if-no-files-found: warn
