@@ -1,5 +1,9 @@
 name: Compile LaTeX
 on: [ push ]
+
+permissions:
+  contents: write
+
 jobs:
   compile-all-tex:
     runs-on: ubuntu-latest
