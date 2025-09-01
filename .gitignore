@@ -296,5 +296,9 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 
-# Output directory
+# Local output directory (for testing)
 out/
+
+# Keep the output directory with compiled PDFs
+!output/
+!output/**/*.pdf

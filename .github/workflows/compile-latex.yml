@@ -7,9 +7,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create output directory
-        run: mkdir -p out
+        run: mkdir -p output
 
       - name: Find and compile all .tex files
         run: |
@@ -19,24 +21,31 @@ jobs:
             # Get the filename without path and extension
             filename=$(basename "$texfile" .tex)
             # Compile the file
-            latexmk -pdf -interaction=nonstopmode -output-directory=out "$texfile" || echo "Warning: Failed to compile $texfile"
+            latexmk -pdf -interaction=nonstopmode -output-directory=output "$texfile" || echo "Warning: Failed to compile $texfile"
             # Rename output to include original path structure
-            if [ -f "out/${filename}.pdf" ]; then
-              # Create subdirectory structure in out/
+            if [ -f "output/${filename}.pdf" ]; then
+              # Create subdirectory structure in output/
               dir=$(dirname "$texfile" | sed 's/^\.\///')
               if [ "$dir" != "." ]; then
-                mkdir -p "out/$dir"
-                mv "out/${filename}.pdf" "out/${dir}/${filename}.pdf"
+                mkdir -p "output/$dir"
+                mv "output/${filename}.pdf" "output/${dir}/${filename}.pdf"
               fi
-              echo "Successfully compiled: $texfile -> out/${dir}/${filename}.pdf"
+              echo "Successfully compiled: $texfile -> output/${dir}/${filename}.pdf"
             fi
           done
           echo "Compilation complete. Listing all PDFs:"
-          find out -name "*.pdf" -type f
+          find output -name "*.pdf" -type f
 
-      - name: Upload all compiled PDFs
+      - name: Commit and push PDFs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add output/
+          git diff --cached --quiet || (git commit -m "Auto-compile LaTeX documents to PDF" && git push)
+
+      - name: Upload all compiled PDFs as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: all-compiled-documents
-          path: out/**/*.pdf
+          path: output/**/*.pdf
           if-no-files-found: warn
