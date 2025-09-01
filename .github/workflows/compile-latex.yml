@@ -8,11 +8,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build using latexmk
+      - name: Build main.tex
         run: latexmk -pdf -output-directory=out main.tex
 
-      - name: Upload document
+      - name: Build test1.tex
+        run: latexmk -pdf -output-directory=out test1.tex
+
+      - name: Build test2.tex
+        run: latexmk -pdf -output-directory=out test2.tex
+
+      - name: Build test3.tex
+        run: latexmk -pdf -output-directory=out test3.tex
+
+      - name: Build test4.tex
+        run: latexmk -pdf -output-directory=out test4.tex
+
+      - name: Build test5.tex
+        run: latexmk -pdf -output-directory=out test5.tex
+
+      - name: Upload all documents
         uses: actions/upload-artifact@v4
         with:
-          name: main-document
-          path: out/main.pdf
+          name: compiled-documents
+          path: out/*.pdf

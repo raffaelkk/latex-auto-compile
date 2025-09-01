@@ -1,0 +1,72 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{color}
+
+\title{Test Document 5: Multi-Column Layout}
+\author{Layout Test}
+\date{\today}
+
+\begin{document}
+
+\twocolumn[
+\begin{@twocolumnfalse}
+\maketitle
+\begin{abstract}
+This document demonstrates various column layouts in LaTeX, including two-column and multi-column environments. The abstract spans the full width of the page even in a two-column document.
+\end{abstract}
+\end{@twocolumnfalse}
+]
+
+\section{Introduction}
+This document is set in two-column mode by default. \lipsum[1]
+
+\section{Standard Two-Column}
+\lipsum[2]
+
+\subsection{Subsection in Two Columns}
+\lipsum[3]
+
+\onecolumn
+\section{Single Column Section}
+This section switches to single column mode for wider content presentation. This is useful when you need to display wide tables, figures, or equations that don't fit well in narrow columns.
+
+\lipsum[4]
+
+\begin{multicols}{3}
+\section{Three Column Layout}
+This section uses the multicol package to create a three-column layout. This is particularly useful for creating newsletters, brochures, or any document that requires multiple narrow columns.
+
+\subsection{First Part}
+\lipsum[5]
+
+\subsection{Second Part}
+\lipsum[6]
+
+\subsection{Third Part}
+Content flows automatically from one column to the next in the multicol environment.
+\end{multicols}
+
+\twocolumn
+\section{Back to Two Columns}
+We've returned to the default two-column layout. \lipsum[7]
+
+\begin{multicols}{2}
+\subsection{Nested Multi-Column}
+Even within a two-column document, we can create different column layouts using multicol.
+
+\lipsum[8]
+\end{multicols}
+
+\section{Conclusion}
+This document has demonstrated various column layouts available in LaTeX, including:
+\begin{itemize}
+    \item Standard two-column mode
+    \item Single column sections
+    \item Multi-column environments (3 columns)
+    \item Nested column layouts
+\end{itemize}
+
+\end{document}

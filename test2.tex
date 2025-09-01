@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\title{Test Document 2: Mathematical Equations}
+\author{Mathematics Test}
+\date{\today}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction to Mathematics}
+This document tests various mathematical typesetting capabilities.
+
+\section{Equations}
+
+\subsection{Inline and Display Equations}
+The quadratic formula is $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
+\begin{equation}
+    \int_{0}^{\infty} e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+\end{equation}
+
+\subsection{Matrix Operations}
+\begin{equation}
+    A = \begin{bmatrix}
+        1 & 2 & 3 \\
+        4 & 5 & 6 \\
+        7 & 8 & 9
+    \end{bmatrix}
+\end{equation}
+
+\section{Theorems and Proofs}
+
+\begin{theorem}[Pythagorean Theorem]
+In a right triangle, $a^2 + b^2 = c^2$ where $c$ is the hypotenuse.
+\end{theorem}
+
+\begin{definition}
+A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.
+\end{definition}
+
+\section{Complex Equations}
+\begin{align}
+    \nabla \times \vec{E} &= -\frac{\partial \vec{B}}{\partial t} \\
+    \nabla \times \vec{B} &= \mu_0 \vec{J} + \mu_0 \epsilon_0 \frac{\partial \vec{E}}{\partial t}
+\end{align}
+
+\end{document}
