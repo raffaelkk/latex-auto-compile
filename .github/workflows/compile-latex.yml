@@ -5,6 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     container: kjarosh/latex:2024.4
     steps:
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get install -y git
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
