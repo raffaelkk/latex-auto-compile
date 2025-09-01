@@ -3,30 +3,21 @@ on: [ push ]
 jobs:
   compile-all-tex:
     runs-on: ubuntu-latest
-    container: kjarosh/latex:2024.4
     steps:
-      - name: Install git
-        run: |
-          apt-get update
-          apt-get install -y git
-
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create output directory
-        run: mkdir -p output
-
-      - name: Find and compile all .tex files
+      - name: Compile all LaTeX files
         run: |
+          mkdir -p output
           echo "Finding all .tex files in repository..."
           find . -name "*.tex" -type f | while read -r texfile; do
             echo "Compiling: $texfile"
             # Get the filename without path and extension
             filename=$(basename "$texfile" .tex)
-            # Compile the file
-            latexmk -pdf -interaction=nonstopmode -output-directory=output "$texfile" || echo "Warning: Failed to compile $texfile"
+            # Compile the file using Docker
+            docker run --rm -v "$(pwd):/workspace" -w /workspace kjarosh/latex:2024.4 \
+              latexmk -pdf -interaction=nonstopmode -output-directory=output "$texfile" || echo "Warning: Failed to compile $texfile"
             # Rename output to include original path structure
             if [ -f "output/${filename}.pdf" ]; then
               # Create subdirectory structure in output/
